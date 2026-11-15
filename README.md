@@ -12,7 +12,9 @@ the archive by its checksum; nothing needs to be downloaded by hand.
 | --- | --- | --- |
 | v158.0.21 | 158.0.8127.0 | macOS arm64 |
 
-These are binaries only. The Chromium Embedded Framework is distributed under the BSD licence in
-`LICENSE.txt`; the licences of Chromium and of the third-party components it includes are in
-`CREDITS.html` inside each distribution. They are not stock CEF builds and are not interchangeable
-with them: an application must use the bindings of the same version.
+These are binaries only; the source of the changes they contain is not published. The changes
+are the copyright of their author, all rights reserved. The Chromium Embedded Framework they are
+built from is the work of its authors under the BSD licence in `LICENSE.txt`, and Chromium and the
+third-party components it includes are under the licences in `CREDITS.html` inside each
+distribution. They are not stock CEF builds and are not interchangeable with them: an application
+must use the bindings of the same version.
