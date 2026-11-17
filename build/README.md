@@ -12,19 +12,19 @@ The build agent should inspect the repositories already present on the machine a
 
 Use Visual Studio C++ tools, the Windows SDK required by the pinned Chromium checkout, and depot_tools on Windows. Use its supported Xcode toolchain on macOS. Follow the prepared checkout's dependency setup; do not modify global Git settings or download a second source tree unnecessarily.
 
-Create an isolated output directory. Start with the existing working platform `args.gn`, then merge `h264-aac.gn` as overrides, with exactly one assignment per key. Set `target_cpu = "x64"` on Windows and `target_cpu = "arm64"` on macOS. Set `use_remoteexec = false` unless a working remote build service has explicitly been configured. Preserve all other required NY build arguments.
+Reuse the existing working Release output directory. Preserve the previous distributable and back up `args.gn` before changing arguments. Do not relocate the build directory or clear its cache: compiler modules and dependency records may be path-sensitive. Start with the existing working platform `args.gn`, then merge `h264-aac.gn` as overrides, with exactly one assignment per key. Set `target_cpu = "x64"` on Windows and `target_cpu = "arm64"` on macOS. Set `use_remoteexec = false` unless a working remote build service has explicitly been configured. Preserve all other required NY build arguments.
 
 Run from Chromium `src`, with depot_tools on PATH:
 
 ```sh
-gn gen out/H264AAC_GN
+gn gen out/Official_GN_arm64
 # Use the native siso executable, siso.exe on Windows.
-third_party/siso/cipd/siso ninja -C out/H264AAC_GN -local_jobs=10 -re_exec_enable=false cef
+third_party/siso/cipd/siso ninja -C out/Official_GN_arm64 -local_jobs=10 -re_exec_enable=false cef
 ```
 
 Choose local parallelism for the machine; ten jobs is the current 12-logical-core Mac setting, not a universal requirement. Resume with the same output directory and command. Do not clean caches on an interrupted build. Siso's direct `-j` option is unsupported; use `-local_jobs`.
 
-The running macOS candidate uses `out/TVMedia_GN_arm64` for historical reasons. Do not rename or regenerate that directory while its build is running.
+The command above shows the existing macOS output directory. On Windows, use its existing Release output path instead. The abandoned macOS `out/TVMedia_GN_arm64` build is stopped and retained; the active media build now reuses `out/Official_GN_arm64`. A dry-run count can underestimate work caused by newly generated buildflag headers; verify the actual build graph after those headers are generated.
 
 ## Validate and package
 
