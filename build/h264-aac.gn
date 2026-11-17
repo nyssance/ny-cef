@@ -1,0 +1,8 @@
+# Apply these overrides to the prepared NY CEF Release build arguments.
+# Preserve the platform configuration and SurfaceEmbed source patches.
+is_debug = false
+is_official_build = true
+is_component_build = false
+use_thin_lto = false
+proprietary_codecs = true
+ffmpeg_branding = "Chrome"

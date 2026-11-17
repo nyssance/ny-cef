@@ -25,3 +25,9 @@ built from is the work of its authors under the BSD licence in `LICENSE.txt`, an
 third-party components it includes are under the licences in `CREDITS.html` inside each
 distribution. They are not stock CEF builds and are not interchangeable with them: an application
 must use the bindings of the same version.
+
+## Media build candidate
+
+The optional `h264-aac` Release variant is described in [build/README.md](build/README.md).
+Its source identity and validation status are recorded in [build/h264-aac.json](build/h264-aac.json).
+It is a candidate, not an additional published release in the table above.

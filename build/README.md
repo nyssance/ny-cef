@@ -1,0 +1,50 @@
+# H.264/AAC Release build
+
+This variant changes build arguments, not the HTML video implementation. Keep the existing NY CEF SurfaceEmbed sources and platform setup. The public repository does not contain the private source changes; cloning upstream CEF alone cannot reproduce NY CEF.
+
+## Source identity
+
+`h264-aac.json` records the current macOS candidate's CEF commit, Chromium base, depot_tools revision, and tracked Chromium patch digest. The patch digest includes applied CEF patches. It is a provenance check, not a downloadable patch. Windows is an unverified target until its own build and playback checks pass.
+
+The build agent should inspect the repositories already present on the machine and find the Chromium `src` directory, its prepared `cef` checkout, and depot_tools. Verify the manifest's source revisions before building. Do not replace existing private patches with upstream source or silently use an older source bundle. If the required NY source revision is unavailable, report the missing revision rather than producing a stock CEF package under the NY name.
+
+## Build
+
+Use Visual Studio C++ tools, the Windows SDK required by the pinned Chromium checkout, and depot_tools on Windows. Use its supported Xcode toolchain on macOS. Follow the prepared checkout's dependency setup; do not modify global Git settings or download a second source tree unnecessarily.
+
+Create an isolated output directory. Start with the existing working platform `args.gn`, then merge `h264-aac.gn` as overrides, with exactly one assignment per key. Set `target_cpu = "x64"` on Windows and `target_cpu = "arm64"` on macOS. Set `use_remoteexec = false` unless a working remote build service has explicitly been configured. Preserve all other required NY build arguments.
+
+Run from Chromium `src`, with depot_tools on PATH:
+
+```sh
+gn gen out/H264AAC_GN
+# Use the native siso executable, siso.exe on Windows.
+third_party/siso/cipd/siso ninja -C out/H264AAC_GN -local_jobs=10 -re_exec_enable=false cef
+```
+
+Choose local parallelism for the machine; ten jobs is the current 12-logical-core Mac setting, not a universal requirement. Resume with the same output directory and command. Do not clean caches on an interrupted build. Siso's direct `-j` option is unsupported; use `-local_jobs`.
+
+The running macOS candidate uses `out/TVMedia_GN_arm64` for historical reasons. Do not rename or regenerate that directory while its build is running.
+
+## Validate and package
+
+Before publishing, use the matching NY bindings and an isolated application identity/profile to verify:
+
+- MP4 with H.264 video and AAC audio loads through an ordinary HTML `video` element.
+- Frames advance, audio is audible, seeking and repeated pause/resume work, and audio/video remain synchronized.
+- Multiple canvas videos retain correct clipping, transforms, and stacking; hidden videos stop decoding when paused by the host.
+- Record the actual decoder selected and whether hardware acceleration is active; `canPlayType` alone is insufficient.
+- SurfaceEmbed remains functional. Test macOS ARM64 and Windows x64 separately; never report one platform's result for the other.
+
+Create a complete minimal SDK using the checkout's existing distribution process, including headers, libraries, resources, license notices and CREDITS.html. The upstream distribution tool assumes particular output directory names: do not accidentally package an older default output directory. Verify that the packaged binary is the candidate that passed playback tests. Do not publish a framework/DLL alone as a complete SDK.
+
+Artifact names:
+
+```text
+ny-cef-158.0.25-h264-aac-macos-arm64.tar.gz
+ny-cef-158.0.25-h264-aac-windows-x64.zip
+```
+
+Default builds have no `standard` suffix. Record codec capabilities and SHA-256 checksums in the artifact manifest. Existing download clients use the CEF archive/index schema: friendly artifact names are not a reason to overwrite existing standard assets or change the default index. Add an explicit variant selection before integrating a media archive into automated downloads.
+
+The variant name identifies enabled codecs, not a patent license. Preserve third-party notices and do not claim that this build grants downstream patent coverage. Publication follows platform validation and confirmation of the distributor's licensing position.

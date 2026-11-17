@@ -1,0 +1,22 @@
+{
+  "version": "158.0.25",
+  "variant": "h264-aac",
+  "chromium_version": "158.0.8127.0",
+  "chromium_commit": "a0263a621f06c736bb09a3b9eb2d093341d9266c",
+  "cef_commit": "3ac7d76fcd57c94bf4e0d92ae8da12fc892d9d3a",
+  "cef_tree": "d8037851401b73190c52cfac1e443e773cf66d34",
+  "reference_chromium_patch_sha256": "4c47f60543dd1b508ec13b4d90e44dc661ca273518dce4fe7db43380ca9289e7",
+  "depot_tools_commit": "289a37bda3d848cfe16e6c1c599741ed3890ab55",
+  "platforms": [
+    "macos-arm64",
+    "windows-x64"
+  ],
+  "codecs": {
+    "h264": true,
+    "aac": true
+  },
+  "validation": {
+    "macos-arm64": "build in progress; playback not yet verified",
+    "windows-x64": "not built or verified"
+  }
+}
