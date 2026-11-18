@@ -36,7 +36,7 @@ Before publishing, use the matching NY bindings and an isolated application iden
 - Record the actual decoder selected and whether hardware acceleration is active; `canPlayType` alone is insufficient.
 - SurfaceEmbed remains functional. Test macOS ARM64 and Windows x64 separately; never report one platform's result for the other.
 
-Create a complete minimal SDK using the checkout's existing distribution process, including headers, libraries, resources, license notices and CREDITS.html. The upstream distribution tool assumes particular output directory names: do not accidentally package an older default output directory. Verify that the packaged binary is the candidate that passed playback tests. Do not publish a framework/DLL alone as a complete SDK.
+Create a complete minimal SDK using the checkout's existing distribution process, including headers, libraries, resources, license notices and CREDITS.html. The upstream distribution tool assumes particular output directory names: do not accidentally package an older default output directory. Verify that the packaged binary is the candidate that passed playback tests. Do not publish a framework/DLL alone as a complete SDK. Build the archive from a clean SDK directory, not a download cache. Reject nested SDK archives, versioned download directories, and duplicate framework binaries before uploading. Verify the packaged framework digest matches the tested binary and check the remote asset state and SHA-256 after upload.
 
 Artifact names:
 
