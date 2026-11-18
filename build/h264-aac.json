@@ -16,7 +16,7 @@
     "aac": true
   },
   "validation": {
-    "macos-arm64": "build in progress; playback not yet verified",
+    "macos-arm64": "Release SDK built; HTML video H.264 playback, seeking/resume and AAC decode verified; VideoToolbox video decoder confirmed. Application canvas/SurfaceEmbed integration not revalidated.",
     "windows-x64": "not built or verified"
   }
 }

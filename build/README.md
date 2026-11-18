@@ -19,12 +19,12 @@ Run from Chromium `src`, with depot_tools on PATH:
 ```sh
 gn gen out/Official_GN_arm64
 # Use the native siso executable, siso.exe on Windows.
-third_party/siso/cipd/siso ninja -C out/Official_GN_arm64 -local_jobs=10 -re_exec_enable=false cef
+third_party/siso/cipd/siso ninja -C out/Official_GN_arm64 -local_jobs=10 -re_exec_enable=false cef_framework cefclient cef_sandbox
 ```
 
 Choose local parallelism for the machine; ten jobs is the current 12-logical-core Mac setting, not a universal requirement. Resume with the same output directory and command. Do not clean caches on an interrupted build. Siso's direct `-j` option is unsupported; use `-local_jobs`.
 
-The command above shows the existing macOS output directory. On Windows, use its existing Release output path instead. The abandoned macOS `out/TVMedia_GN_arm64` build is stopped and retained; the active media build now reuses `out/Official_GN_arm64`. A dry-run count can underestimate work caused by newly generated buildflag headers; verify the actual build graph after those headers are generated.
+The command above shows the existing macOS output directory. On Windows, use its existing Release output path and Windows distribution targets instead; the framework target above is macOS-specific. The abandoned macOS `out/TVMedia_GN_arm64` build is stopped and retained; the active media build now reuses `out/Official_GN_arm64`. A dry-run count can underestimate work caused by newly generated buildflag headers; verify the actual build graph after those headers are generated.
 
 ## Validate and package
 
