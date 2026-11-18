@@ -41,10 +41,10 @@ Create a complete minimal SDK using the checkout's existing distribution process
 Artifact names:
 
 ```text
-ny-cef-158.0.25-h264-aac-macos-arm64.tar.gz
-ny-cef-158.0.25-h264-aac-windows-x64.zip
+ny-cef-158.0.25-h264-aac-macos-arm64.tar.bz2
+ny-cef-158.0.25-h264-aac-windows-x64.tar.bz2
 ```
 
-Default builds have no `standard` suffix. Record codec capabilities and SHA-256 checksums in the artifact manifest. Existing download clients use the CEF archive/index schema: friendly artifact names are not a reason to overwrite existing standard assets or change the default index. Add an explicit variant selection before integrating a media archive into automated downloads.
+All SDK archives use `.tar.bz2`, with one top-level directory matching the archive basename. Repackage an existing SDK with `python3 build/repack.py SOURCE DESTINATION`; this verifies every SDK file after compression. Default builds have no `standard` suffix: `ny-cef-158.0.25-macos-arm64.tar.bz2` and `ny-cef-158.0.25-windows-x64.tar.bz2`. Record codec capabilities and SHA-256 checksums in the artifact manifest. Generate each release index from its manifests with `python3 build/index.py manifest-macos-arm64.json [manifest-windows-x64.json] > index.json`; omit unpublished platforms. Existing download clients use the CEF archive/index schema: each release has an `index.json` using the unified names. Use `@nyssance/cef-rs` 158.0.26 or newer for these names. Select the media build explicitly with `CEF_DOWNLOAD_URL=https://github.com/nyssance/ny-cef/releases/download/v158.0.25-h264-aac`; the default release remains unchanged in codec capability. A missing platform in that index is unsupported, not a request to download the standard build.
 
 The variant name identifies enabled codecs, not a patent license. Preserve third-party notices and do not claim that this build grants downstream patent coverage. Publication follows platform validation and confirmation of the distributor's licensing position.
